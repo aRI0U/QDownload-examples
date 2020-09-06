@@ -20,10 +20,15 @@ public:
 public slots:
     void download();
 
+private slots:
+    void displayDownloadStatus(QDownload *download);
+
 private:
     QDownloader *m_downloader;
 
     QLineEdit *m_urlEdit;
     QLineEdit *m_fileEdit;
+
+    QLabel *m_downloadStatus;
 };
 #endif // MAINWINDOW_H

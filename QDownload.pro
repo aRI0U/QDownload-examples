@@ -1,6 +1,4 @@
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       += core gui network widgets
 
 CONFIG += c++11
 
@@ -17,11 +15,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     MainWindow.cpp \
+    download/QDownload.cpp \
     download/QDownloader.cpp \
     main.cpp
 
 HEADERS += \
     MainWindow.h \
+    download/QDownload.h \
     download/QDownloader.h
 
 # Default rules for deployment.
