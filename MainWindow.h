@@ -4,6 +4,7 @@
 #include <QGridLayout>
 #include <QLabel>
 #include <QMainWindow>
+#include <QProgressBar>
 #include <QPushButton>
 #include <QLineEdit>
 
@@ -21,6 +22,7 @@ public slots:
     void download();
 
 private slots:
+    void displayProgress(qint64 bytesReceived, qint64 bytesTotal);
     void displayDownloadStatus(QDownload *download);
 
 private:
@@ -28,6 +30,7 @@ private:
 
     QLineEdit *m_urlEdit;
     QLineEdit *m_fileEdit;
+    QProgressBar *m_progressBar;
 
     QLabel *m_downloadStatus;
 };

@@ -2,6 +2,7 @@
 #define QDOWNLOAD_H
 
 #include <QFile>
+
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QUrl>
@@ -26,9 +27,11 @@ public:
     void get() const;
 
 signals:
+    void downloadProgress(qint64 bytesReceived, qint64 bytesTotal, QDownload *download);
     void finished(QDownload *download);
 
 private slots:
+    void sendDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
     void finishDownload(QNetworkReply *reply);
 
 private:

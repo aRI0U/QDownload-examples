@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent)
       m_downloader(new QDownloader(this)),
       m_urlEdit(new QLineEdit(this)),
       m_fileEdit(new QLineEdit(this)),
+      m_progressBar(new QProgressBar(this)),
       m_downloadStatus(new QLabel(this))
 {
     QGridLayout *layout = new QGridLayout;
@@ -20,8 +21,11 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton *button = new QPushButton("&Download");
     layout->addWidget(button, 2, 0, 1, 2, Qt::AlignCenter);
 
-    layout->addWidget(new QLabel("Download status:"), 3, 0, Qt::AlignRight);
-    layout->addWidget(m_downloadStatus, 3, 1, Qt::AlignLeft);
+    m_progressBar->setRange(0, 100);
+    layout->addWidget(m_progressBar, 3, 0, 1, 2, Qt::AlignCenter);
+
+    layout->addWidget(new QLabel("Download status:"), 4, 0, Qt::AlignRight);
+    layout->addWidget(m_downloadStatus, 4, 1, Qt::AlignLeft);
 
     QWidget *mainWidget = new QWidget(this);
     mainWidget->setLayout(layout);
@@ -30,6 +34,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(button, &QPushButton::clicked,
             this, &MainWindow::download);
+
+    connect(m_downloader, &QDownloader::downloadProgress,
+            this, &MainWindow::displayProgress);
 
     connect(m_downloader, &QDownloader::downloadTerminated,
             this, &MainWindow::displayDownloadStatus);
@@ -42,6 +49,10 @@ void MainWindow::download() {
     m_downloader->download(m_urlEdit->text(), m_fileEdit->text());
 }
 
+
+void MainWindow::displayProgress(qint64 bytesReceived, qint64 bytesTotal) {
+    m_progressBar->setValue(100 * bytesReceived / bytesTotal);
+}
 
 void MainWindow::displayDownloadStatus(QDownload *download) {
     m_downloadStatus->setText(download->error());

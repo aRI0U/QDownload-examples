@@ -20,9 +20,11 @@ public slots:
     void download(const QUrl url, const QString file);
 
 signals:
+    void downloadProgress(qint64 bytesReceived, qint64 bytesTotal, QDownload *download);
     void downloadTerminated(QDownload *download);
 
 private slots:
+    void sendDownloadProgress(qint64 bytesReceived, qint64 bytesTotal, QDownload *download);
     void terminateDownload(QDownload *download);
 
 private:

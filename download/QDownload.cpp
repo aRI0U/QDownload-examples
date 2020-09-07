@@ -30,9 +30,17 @@ void QDownload::setTargetFile(const QFile &file) {
 
 
 void QDownload::get() const {
-    m_manager->get(QNetworkRequest(m_targetUrl));
+    QNetworkReply *reply = m_manager->get(QNetworkRequest(m_targetUrl));
+
+    connect(reply, &QNetworkReply::downloadProgress,
+            this, &QDownload::sendDownloadProgress);
 }
 
+
+void QDownload::sendDownloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
+    qDebug() << bytesReceived << bytesTotal;
+    emit downloadProgress(bytesReceived, bytesTotal, this);
+}
 
 void QDownload::finishDownload(QNetworkReply *reply) {
     // propagate errors if any
