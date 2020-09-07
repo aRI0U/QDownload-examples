@@ -8,7 +8,7 @@ QDownload::QDownload(QObject *parent)
             this, &QDownload::finishDownload);
 }
 
-QDownload::QDownload(const QUrl &url, const QFile &file, QObject *parent)
+QDownload::QDownload(const QUrl &url, const QString &file, QObject *parent)
     : QDownload(parent)
 {
     setTargetUrl(url);
@@ -16,16 +16,28 @@ QDownload::QDownload(const QUrl &url, const QFile &file, QObject *parent)
 }
 
 
+QUrl QDownload::targetUrl() const {
+    return m_targetUrl;
+}
+
+QString QDownload::targetFile() const {
+    return m_targetFile.fileName();
+}
+
 QString QDownload::error() const {
     return m_error;
+}
+
+bool QDownload::success() const {
+    return (m_error == "No error");
 }
 
 void QDownload::setTargetUrl(const QUrl &url) {
     m_targetUrl = url;
 }
 
-void QDownload::setTargetFile(const QFile &file) {
-    m_targetFile.setFileName(file.fileName());
+void QDownload::setTargetFile(const QString &file) {
+    m_targetFile.setFileName(file);
 }
 
 
@@ -50,7 +62,7 @@ void QDownload::finishDownload(QNetworkReply *reply) {
         m_error = m_targetFile.errorString();
 
     else {
-        m_error = "Success";
+        m_error = "No error";
         writeDownloadedData(reply->readAll());
     }
 

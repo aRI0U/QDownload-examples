@@ -6,7 +6,7 @@ QDownloader::QDownloader(QObject *parent) : QObject(parent)
 }
 
 
-void QDownloader::download(const QUrl url, const QFile &file) {
+void QDownloader::download(const QUrl url, const QString file) {
     QDownload *dl = newTask(url, file);
 
     connect(dl, &QDownload::downloadProgress,
@@ -17,9 +17,8 @@ void QDownloader::download(const QUrl url, const QFile &file) {
     dl->get();
 }
 
-void QDownloader::download(const QUrl url, const QString file) {
-    QFile f(file);
-    download(url, f);
+void QDownloader::download(const QUrl url, const QFile &file) {
+    download(url, file.fileName());
 }
 
 
@@ -33,7 +32,7 @@ void QDownloader::terminateDownload(QDownload *download) {
 }
 
 
-QDownload *QDownloader::newTask(const QUrl &url, const QFile &file) {
+QDownload *QDownloader::newTask(const QUrl &url, const QString &file) {
     QDownload *dl = new QDownload(url, file, this);
     m_tasksList.append(dl);
     return dl;

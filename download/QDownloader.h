@@ -16,8 +16,8 @@ public:
     explicit QDownloader(QObject *parent = nullptr);
 
 public slots:
-    void download(const QUrl url, const QFile &file);
     void download(const QUrl url, const QString file);
+    void download(const QUrl url, const QFile &file);
 
 signals:
     void downloadProgress(qint64 bytesReceived, qint64 bytesTotal, QDownload *download);
@@ -28,7 +28,7 @@ private slots:
     void terminateDownload(QDownload *download);
 
 private:
-    QDownload *newTask(const QUrl &url, const QFile &file);
+    QDownload *newTask(const QUrl &url, const QString &file);
 
     QDownloadList m_tasksList;
 };

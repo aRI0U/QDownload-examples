@@ -13,15 +13,16 @@ class QDownload : public QObject
 
 public:
     explicit QDownload(QObject *parent = nullptr);
-    explicit QDownload(const QUrl &url, const QFile &file, QObject *parent = nullptr);
+    explicit QDownload(const QUrl &url, const QString &file, QObject *parent = nullptr);
 
 
     QUrl targetUrl() const;
-    QFile targetFile() const;
+    QString targetFile() const;
     QString error() const;
+    bool success() const;
 
     void setTargetUrl(const QUrl &url);
-    void setTargetFile(const QFile &file);
+    void setTargetFile(const QString &file);
 
 
     void get() const;
