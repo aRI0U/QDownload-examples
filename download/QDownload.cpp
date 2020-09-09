@@ -1,4 +1,4 @@
-#include "QDownload.h"
+﻿#include "QDownload.h"
 
 QDownload::QDownload(QObject *parent)
     : QObject(parent),
@@ -8,11 +8,12 @@ QDownload::QDownload(QObject *parent)
             this, &QDownload::finishDownload);
 }
 
-QDownload::QDownload(const QUrl &url, const QString &file, QObject *parent)
+QDownload::QDownload(const QUrl &url, const QString &file, int kind, QObject *parent)
     : QDownload(parent)
 {
     setTargetUrl(url);
     setTargetFile(file);
+    setKind(kind);
 }
 
 
@@ -22,6 +23,10 @@ QUrl QDownload::targetUrl() const {
 
 QString QDownload::targetFile() const {
     return m_targetFile.fileName();
+}
+
+int QDownload::kind() const {
+    return m_kind;
 }
 
 QString QDownload::error() const {
@@ -40,6 +45,10 @@ void QDownload::setTargetFile(const QString &file) {
     m_targetFile.setFileName(file);
 }
 
+void QDownload::setKind(const int kind) {
+    m_kind = kind;
+}
+
 
 void QDownload::get() const {
     QNetworkReply *reply = m_manager->get(QNetworkRequest(m_targetUrl));
@@ -50,7 +59,6 @@ void QDownload::get() const {
 
 
 void QDownload::sendDownloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
-    qDebug() << bytesReceived << bytesTotal;
     emit downloadProgress(bytesReceived, bytesTotal, this);
 }
 

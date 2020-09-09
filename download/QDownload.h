@@ -2,7 +2,6 @@
 #define QDOWNLOAD_H
 
 #include <QFile>
-
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QUrl>
@@ -13,16 +12,19 @@ class QDownload : public QObject
 
 public:
     explicit QDownload(QObject *parent = nullptr);
-    explicit QDownload(const QUrl &url, const QString &file, QObject *parent = nullptr);
+    explicit QDownload(const QUrl &url, const QString &file, int kind = 0, QObject *parent = nullptr);
 
 
     QUrl targetUrl() const;
     QString targetFile() const;
+    int kind() const;
+
     QString error() const;
     bool success() const;
 
     void setTargetUrl(const QUrl &url);
     void setTargetFile(const QString &file);
+    void setKind(const int kind);
 
 
     void get() const;
@@ -43,6 +45,7 @@ private:
 
     QFile m_targetFile;
     QUrl m_targetUrl;
+    int m_kind;
 };
 
 #endif // QDOWNLOAD_H

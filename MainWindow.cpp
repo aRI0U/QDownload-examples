@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     QPushButton *button = new QPushButton("&Download");
     layout->addWidget(button, 2, 0, 1, 2, Qt::AlignCenter);
 
-    m_progressBar->setRange(0, 100);
+    m_progressBar->setRange(0, 1);
     layout->addWidget(m_progressBar, 3, 0, 1, 2, Qt::AlignCenter);
 
     layout->addWidget(new QLabel("Download status:"), 4, 0, Qt::AlignRight);
@@ -51,10 +51,10 @@ void MainWindow::download() {
 
 
 void MainWindow::displayProgress(qint64 bytesReceived, qint64 bytesTotal) {
-    m_progressBar->setValue(100 * bytesReceived / bytesTotal);
+    m_progressBar->setMaximum(bytesTotal > 0 ? bytesTotal : 0);
+    m_progressBar->setValue(bytesReceived);
 }
 
 void MainWindow::displayDownloadStatus(QDownload *download) {
     m_downloadStatus->setText(download->error());
-    delete download;
 }

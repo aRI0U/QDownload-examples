@@ -42,7 +42,7 @@ A single `QDownloader` can perform multiple downloads: you don't have to instant
 The downloading operation is run asynchronously. A `downloadTerminated` signal is sent by the `QDownloader` object when the download is complete. Therefore, **YOU MUST AVOID** structures like this:
 
 ```c++
-QDownloader *downloader(this);
+QDownloader *downloader = new QDownloader(this);
 QFile targetFile(fileName);
 downloader->download(targetUrl, targetFile);
 
@@ -73,7 +73,6 @@ void mySlot(QDownload *download) {
     else {
         qDebug() << download->error();  // print the error as a human-readable string
     }
-    delete download;
 }
 ```
 
@@ -91,12 +90,75 @@ Information about a download can be retrieved with the following functions:
 - `targetFile()` returns the target file of the download.
 - `error()` returns the error encountered during the download as a human-readable string. If no error occurred, it equals `"No error"`.
 - `success()` indicates whether the downloading operation has been successful or not.
+- `kind()` returns the *kind* of the download (see below)
 
 `QDownload` objects are supposed to be accessed only in slots connected with `QDownloader` signals. Therefore only those read-only methods should be directly called. In particular, `QDownload` signals are automatically connected to `QDownloader` ones, and you thus should never directly connect `QDownload` signals to your own slots. Only connect `QDownloader` signals to your own slots.
 
+### Use QDownload::kind to handle downloading of different kinds of files
+
+The `kind` property of `QDownload` enables to propagate additional information about the download. Assume for example that one wants to download different kinds of files, e.g. text, images and music, and that each file must be postprocessed after being downloaded. The code snippet below gives an example of how to solve such a situation.
+
+```c++
+#include "download/QDownloader.h"
+
+enum FileType {
+    Text,
+    Image,
+    Music
+}
+
+MyClass::MyClass() {
+    ...
+    connect(downloader, &QDownloader::downloadTerminated,
+            this, &MyClass::postprocess);
+    ...
+}
+
+void MyClass::downloadText(QUrl &url, QString &file) {
+    downloader->download(url, file, FileType::Text);
+}
+
+void MyClass::downloadImage(QUrl &url, QString &file) {
+    downloader->download(url, file, FileType::Image);
+}
+
+void MyClass::downloadMusic(QUrl &url, QString &file) {
+    downloader->download(url, file, FileType::Music);
+}
+
+void MyClass::postprocess(QDownload *download) {
+    if (!download->success()) {
+        qDebug() << download->error();
+        return;
+    }
+    
+    switch (download->kind()) {
+        case FileType::Text:
+            // postprocessing method for downloaded text files
+            break;
+        case FileType::Image:
+            // postprocessing method for downloaded image files
+            break;
+        case FileType::Music:
+            // postprocessing method for downloaded music files
+            break;
+        default:
+            break;
+    }
+}
+```
 
 
 
 
-Please don't hesitate to raise issues if you encounters some errors or if you have any question about QDownload.
+
+## Contribute
+
+Pull requests and issues are more than welcome!
+
+
+
+## TODOs
+
+- Multithreading
 
