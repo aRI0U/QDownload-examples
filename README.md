@@ -1,4 +1,4 @@
-# QDownload: File downloader for QT applications
+# QDownload: File downloader for Qt applications
 
 This project provides an implementation of a so-called **QDownloader**, which enables to download data from remote servers.
 
@@ -12,12 +12,19 @@ This project provides an implementation of a so-called **QDownloader**, which en
    QT += network
    ```
 
-2. Copy-paste the content of the `./download` directory in your project
+2. Clone the `QDownload` repository as a submodule of your project:
+
+   ```bash
+   cd path/to/download/
+   git submodule add https://github.com/aRI0U/QDownload.git
+   ```
+
+   
 
 3. Include `QDownloader` in the header of files in which you want to download files:
 
    ```c++
-   #include "path/to/download/QDownloader.h"
+   #include "path/to/download/QDownload/QDownloader.h"
    ```
 
    
