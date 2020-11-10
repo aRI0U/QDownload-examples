@@ -1,0 +1,3 @@
+[submodule "QDownload"]
+	path = QDownload
+	url = https://github.com/aRI0U/QDownload.git
